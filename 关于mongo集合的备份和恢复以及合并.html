@@ -6,10 +6,10 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Mr.GaoYang" />
-        <title>第一次练手</title>
+        <title>关于mongo集合的备份和恢复以及合并</title>
         
-        <meta name="description" content="" />
-        <meta name="keywords" content="Blog "/>
+<meta name="description" content="&lt;p&gt;集合的操作。&lt;/p&gt;" />
+<meta name="keywords" content=" mongo  "/>
 
         <!--[if !IE 7]>
         <style type="text/css">
@@ -37,8 +37,8 @@
                         <ul class="left">
                         </ul>
                         <ul class="right">
-                            <li class="active"><a href="https://obeyconquer.github.io/category/di-yi-ci-lian-shou.html">第一次练手</a></li>
-                            <li><a href="https://obeyconquer.github.io/category/mongo.html">mongo</a></li>
+                            <li><a href="https://obeyconquer.github.io/category/di-yi-ci-lian-shou.html">第一次练手</a></li>
+                            <li class="active"><a href="https://obeyconquer.github.io/category/mongo.html">mongo</a></li>
                         </ul>
                     </section>
                 </nav>
@@ -52,34 +52,41 @@
             
                 <div id="contents">
 <div class="row">
-    <div class="small-12 columns">
-        <h2>Articles in category &ldquo;第一次练手&rdquo;</h2>
-          <section class="summary">
-    <h3><a href="https://obeyconquer.github.io/利用Pelican和Github Page搭建我们的小博客.html" rel="bookmark" title="Permalink to 利用Pelican和Github Page搭建我们的小博客">利用Pelican和Github Page搭建我们的小博客</a></h3>
-    <div class="row info-bar" style="margin-left:0rem;margin-bottom:6px;">
+    <div class="small-12 columns article">
+        <h2>关于mongo集合的备份和恢复以及合并</h2>
+        <div class="row info-bar" style="margin-left:0rem;margin-bottom:6px;">
     <div class="small-12 columns">
         <ul class="inline-list">
-            <li><span><i class="fa fa-calendar"></i>&nbsp; 五 03 三月 2017</span></li>
-            <li><span><i class="fa fa-folder-open"></i>&nbsp; <a href="https://obeyconquer.github.io/category/di-yi-ci-lian-shou.html">第一次练手</a></span></li>
+            <li><span><i class="fa fa-calendar"></i>&nbsp; 五 17 三月 2017</span></li>
+            <li><span><i class="fa fa-folder-open"></i>&nbsp; <a href="https://obeyconquer.github.io/category/mongo.html">mongo</a></span></li>
             <li>
                 <span>
                     <i class="fa fa-tags"></i>&nbsp;
-                    <a href="https://obeyconquer.github.io/tag/pelican.html"><span class="label">pelican</span></a>
-                    <a href="https://obeyconquer.github.io/tag/publishing.html"><span class="label">publishing</span></a>
+                    <a href="https://obeyconquer.github.io/tag/mongo.html"><span class="label">mongo</span></a>
                 </span>
             </li>
         </ul>
     </div>
 </div>
-    <div class="row summary">
-        <div class="small-12 medium-12 columns">
-            <p>人是技术的载体，技术通过人来施展。</p>
-            <p class='text-right'><a href="https://obeyconquer.github.io/利用Pelican和Github Page搭建我们的小博客.html">Continue reading&hellip;</a></p>
-        </div>
-    </div>
-</section>
-
-
+        <section class="article">
+            <p>关于mongo集合的备份和恢复以及合并</p>
+<p>在mongo中，数据是存储在集合中的，数据的形式为key，values对。
+mongo存在单独的命令对集合进行备份恢复</p>
+<p>集合的导出
+/data/home/user00/<strong><em>*/usr/mongo/bin/mongoexport --host 127.0.0.1 --port 31000 --username </em></strong><strong> --password </strong>**** --collection test_table --db test_db --out test_table.json
+将test_db库的test_table集合导出，并存储为json文件（默认当前路径）</p>
+<p>集合的恢复
+/data/home/user00/<strong><em>*/usr/mongo/bin/mongoimport --host 127.0.0.1 --port 31000 --username </em></strong><strong> --password </strong>**** --collection test_table --db test_db --file test_table.json</p>
+<p>合并集合
+集合在合并的时候，因为id创建规则一致，所以会出现id重复的情况，这种情况下是没办法合并集合的，我们需要用些手段去更改某个集合的id信息，最简单的为把id的某一列字母做统一修改(需要先观察下两个需要合并集合的id情况再决定)
+如：
+for i in <code>cat test_table.json</code>
+do
+a=<code>echo $i | awk -F "}" '{print $1}' | awk -F '"' '{print $6}'</code>
+b=<code>echo $a | sed 's@5@4@'</code>
+sed -i 's@'$a'@'$b'@g' test_table.json
+done</p>    
+        </section>
     </div>
 </div>
                 </div>
