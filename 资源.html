@@ -1,0 +1,274 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <link rel="shortcut icon" href="佐助.jpg" />
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="author" content="Mr.GaoYang" />
+        <title>docker实战之容器基础</title>
+        
+<meta name="description" content="&lt;p&gt;docker概念&lt;/p&gt;" />
+<meta name="keywords" content=" 容器  "/>
+
+        <!--[if !IE 7]>
+        <style type="text/css">
+            #main-content {display:table;height:100%}
+        </style>
+        <![endif]-->
+        <link rel="stylesheet" href="https://obeyconquer.github.io/theme/css/backdrop.css" />
+        <link rel="stylesheet" href="https://obeyconquer.github.io/theme/css/pygments.css" />
+        <script src="https://obeyconquer.github.io/theme/js/modernizr.js"></script>
+
+
+    </head>
+      
+
+    <body>
+        <div class="master-row">
+
+            <div class="content-pane main-content">
+                <nav class="top-bar" data-topbar role="navigation">
+                    <ul class="title-area">
+                        <li class="name"><!-- Leave this empty --></li>
+                        <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+                    </ul>
+                    <section class="top-bar-section">
+                        <ul class="left">
+                        </ul>
+                        <ul class="right">
+                            <li><a href="https://obeyconquer.github.io/category/di-yi-ci-lian-shou.html">第一次练手</a></li>
+                            <li><a href="https://obeyconquer.github.io/category/mongo.html">mongo</a></li>
+                            <li><a href="https://obeyconquer.github.io/category/mysqlbei-qing-dang.html">mysql被清档</a></li>
+                            <li><a href="https://obeyconquer.github.io/category/na-mian-qiang-na-zhang-chuang-huan-you-na-ge-bing-xiang.html">那面墙，那张床，还有那个冰箱</a></li>
+                            <li class="active"><a href="https://obeyconquer.github.io/category/yun.html">云</a></li>
+                        </ul>
+                    </section>
+                </nav>
+
+                <div class="row title-bar">
+                    <div class="small-12 columns">
+                        <h1><a href="https://obeyconquer.github.io">Mr.GaoYang live</a></h1><h2> <small></small></h2>
+                        <hr>
+                    </div>
+                </div>
+            
+                <div id="contents">
+<div class="row">
+    <div class="small-12 columns article">
+        <h2>docker实战之容器基础</h2>
+        <div class="row info-bar" style="margin-left:0rem;margin-bottom:6px;">
+    <div class="small-12 columns">
+        <ul class="inline-list">
+            <li><span><i class="fa fa-calendar"></i>&nbsp; 五 19 五月 2017</span></li>
+            <li><span><i class="fa fa-folder-open"></i>&nbsp; <a href="https://obeyconquer.github.io/category/yun.html">云</a></span></li>
+            <li>
+                <span>
+                    <i class="fa fa-tags"></i>&nbsp;
+                    <a href="https://obeyconquer.github.io/tag/rong-qi.html"><span class="label">容器</span></a>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+        <section class="article">
+            <p>部署安装
+条件：kernel 3.8以上，centos 7官方源
+安装：
+1.yum install docker docker-engine -y
+配置yum源
+cat &gt; /etc/yum.repos.d/docker.repo &lt;&lt; EOF
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/7
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+EOF</p>
+<p>2.设置开机启动以及信息
+systemctl start docker.service
+systemctl enable docker.service
+查看进程状态
+systemctl | grep docker</p>
+<p>查看docker
+信息
+docker info</p>
+<p>版本(client和server)
+docker version</p>
+<p>docker0虚拟网桥
+ip addr</p>
+<p>换回默认的iptables服务
+systemctl disable firewalld
+yum install iptables-services -y
+systemctl start iptables
+systemctl enable iptalbes</p>
+<p>3.配置
+文件：</p>
+<p>/etc/sysconfig/docker contos 7以下</p>
+<p>参数：
+OPTIONS用来控制docker daemon进程参数。
+-H   daemon绑定的地址，如：-H=unix:///var/run/docker.sock，-H=tcp=://0.0.0.0:2375
+—registry-mirror    表示registry的镜像地址，—registry-mirror=http://4bc5abeb.m.daocloud.io
+—insecure-registry    表示(本地)私有registry的地址，—insecure-registry ${pivateRegistyHost}:5000
+—selinux-enabled    是否开启SELinux，默认开启，—selinux-enabled=true
+—bip    表示网桥docker0使用CIDR网络地址，—bip=172.17.42.1
+-b    表示采用已经创建好的网桥，-b=xxx</p>
+<p>OPTIONS=-H=unix:///var/run/docker.sock -H=tcp=://0.0.0.0:2375 —registry-mirror=http://4bc5abeb.m.daocloud.io —selinux-enabled=true</p>
+<p>下面是代理的设置：
+http_proxy=xxxxxx:8080
+https_proxy=xxxxxxx:8080</p>
+<p>/usr/lib/systemd/system/docker.service  contos 7</p>
+<p>ExecStart=/usr/bin/docker daemon -H fd:// -H=unix:///var/run/docker.sock -H=tcp://0.0.0.0:2375 —registry-mirror=http://4bc5abeb.m.daocloud.io —selinux-enabled=true</p>
+<p>[Service]
+Environment=“HTTP_PROXY=xxxxxx:8080”
+Environment=“HTTPS_PROXY=xxxxxx:8080”
+Type=notify
+ExecStart=/usr/bin/docker daemo</p>
+<p>4.日志
+/var/log/message</p>
+<p>5.基础命令
+1)docker search java 安装</p>
+<p>2)docker pull java  更新java</p>
+<p>3)docker images 查询</p>
+<p>4)docker run</p>
+<p>docker run 里面的命令结束了，container就结束了。
+docker run [OPTIONS] IMAGE[:TAG] [COMMAND] [ARG…]
+决定容器的运行方式，前台还是后台执行。
+docker run后面追加-d=true或者-d，容器会在后台运行。
+docker exec 进入到容器中，或者attach重新连接容器的会话。
+进行交互操作，如：shell脚本，必须使用-i -t参数同容器进行数据交互。
+docker run 没有指定—name，deamon会自动生成一个随机字符串UUID。
+docker有自动化的需求，可以将containerID输出到指定的pid文件，—cidfile=“”。
+docker容器没有特权，不能在容器中再启动一个容器，这是因为默认情况下容器不能访问任何其他设备，但通过”privileged”容器就有了访问其他设备的权限。</p>
+<p>run -rm</p>    
+        </section>
+    </div>
+</div>
+                </div>
+
+                <footer class="show-for-large-up">
+<div class="row">
+    <div class="small-6 medium-3 columns">
+        <ul class="left-nav">
+            <li><a href="https://obeyconquer.github.io">Home &nbsp;<i class="fa fa-home fa-fw"></i></a></li>
+            <li><a href="https://obeyconquer.github.io/categories.html">Categories &nbsp;<i class="fa fa-folder-open fa-fw"></i></a></li>
+        </ul>
+    </div>
+    <div class="small-6 medium-3 medium-push-6 columns">
+        <ul class="right-nav">
+            <li><a href="https://obeyconquer.github.io/archives.html"><i class="fa fa-archive fa-fw"></i>&nbsp; Archives</a></li>
+        </ul>
+    </div>
+    <div class="small-12 medium-6 medium-pull-3 columns text-center">
+        <p class="tag-cloud">
+            <a href="https://obeyconquer.github.io/tags.html"><i class="fa fa-tags"></i>&nbsp;Tags:</a>&nbsp;&nbsp;
+            &nbsp;&hellip;
+        </p>
+    </div>
+    <div class="small-12 columns sub-footer">
+        <hr>
+        <div class="small-12 medium-6 columns">
+            <p class="small-text-center medium-text-left">
+                &copy;  Mr.GaoYang 
+                <!-- <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="cc.png" /></a>-->
+            </p>
+        </div>
+        <div class="small-12 medium-6 columns">
+            <p class="small-text-center medium-text-right">
+                Proudly powered by <a href="http://blog.getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="https://www.python.org/">Python</a>.
+            </p>
+        </div>
+    </div>
+</div>                </footer>
+            </div>
+            
+            <div class="image-pane main-content" style="background: url(''); background-size:cover; background-position: right;">
+                <div class="row">
+                    <div class="small-12 medium-4 large-12 columns">
+                        <h5 class='text-center'>About</h5>
+                        <div class="about-me">
+                            <div class="hide-for-medium-only small-3 columns no-buffer">
+                                <a class="th" href="image/hyrz.jpg">
+                                    <img src="image/hyrz.jpg">
+                                </a>
+                            </div>
+                            <div class="small-9 medium-12 large-9 columns text-justify">
+                                
+高洋,IT从业人员,
+1989年4月10日,
+邮箱：gy59821@163.com,
+现就职于北京玩蟹科技有限公司.
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="small-12 medium-4  large-12 columns link-list">
+                        <h5 class='text-center'>Links</h5>
+                        <ul class="inline-center">
+                            <li><a href="http://taoyake.com/">陶亚可</a></li>
+                            <li><a href="https://www.heyyezi.com/">赵强</a></li>
+                            <li><a href="https://dolinks.github.io/">张艺馨</a></li>
+                            <li><a href="https://lankors.github.io/">郑莹莹</a></li>
+                            <li><a href="http://mingmings.org/">宋明明</a></li>
+                            <li><a href="http://www.djhull.com/">吴启超</a></li>
+                            <li><a href="https://successfuljian.github.io/">王健</a></li>
+                            <li><a href="https://baiyibing123.github.io/">白乙兵</a></li>
+                        </ul>
+                    </div>
+
+<!--
+                    <div class="small-12 medium-3 large-12 columns">
+                    </div>
+-->
+               </div>
+            </div>
+        </div>
+        
+        
+        <div class="row">
+            <footer class="hide-for-large-up">
+<div class="row">
+    <div class="small-6 medium-3 columns">
+        <ul class="left-nav">
+            <li><a href="https://obeyconquer.github.io">Home &nbsp;<i class="fa fa-home fa-fw"></i></a></li>
+            <li><a href="https://obeyconquer.github.io/categories.html">Categories &nbsp;<i class="fa fa-folder-open fa-fw"></i></a></li>
+        </ul>
+    </div>
+    <div class="small-6 medium-3 medium-push-6 columns">
+        <ul class="right-nav">
+            <li><a href="https://obeyconquer.github.io/archives.html"><i class="fa fa-archive fa-fw"></i>&nbsp; Archives</a></li>
+        </ul>
+    </div>
+    <div class="small-12 medium-6 medium-pull-3 columns text-center">
+        <p class="tag-cloud">
+            <a href="https://obeyconquer.github.io/tags.html"><i class="fa fa-tags"></i>&nbsp;Tags:</a>&nbsp;&nbsp;
+            &nbsp;&hellip;
+        </p>
+    </div>
+    <div class="small-12 columns sub-footer">
+        <hr>
+        <div class="small-12 medium-6 columns">
+            <p class="small-text-center medium-text-left">
+                &copy;  Mr.GaoYang 
+                <!-- <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="cc.png" /></a>-->
+            </p>
+        </div>
+        <div class="small-12 medium-6 columns">
+            <p class="small-text-center medium-text-right">
+                Proudly powered by <a href="http://blog.getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="https://www.python.org/">Python</a>.
+            </p>
+        </div>
+    </div>
+</div>            </footer>
+        </div>
+        
+        
+        <script src="https://obeyconquer.github.io/theme/js/jquery.min.js"></script>
+        <script src="https://obeyconquer.github.io/theme/js/foundation.min.js"></script>
+        <script src="https://obeyconquer.github.io/theme/js/app.js"></script>
+    </body>
+  
+</html>
