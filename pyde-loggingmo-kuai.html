@@ -6,10 +6,10 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Mr.GaoYang" />
-        <title>云</title>
+        <title>py的logging模块</title>
         
-        <meta name="description" content="" />
-        <meta name="keywords" content="Blog "/>
+<meta name="description" content="&lt;p&gt;py的logging模块&lt;/p&gt;" />
+<meta name="keywords" content=" 日志  "/>
 
         <!--[if !IE 7]>
         <style type="text/css">
@@ -38,12 +38,12 @@
                         </ul>
                         <ul class="right">
                             <li><a href="https://obeyconquer.github.io/category/di-yi-ci-lian-shou.html">第一次练手</a></li>
-                            <li><a href="https://obeyconquer.github.io/category/logging.html">logging</a></li>
+                            <li class="active"><a href="https://obeyconquer.github.io/category/logging.html">logging</a></li>
                             <li><a href="https://obeyconquer.github.io/category/mongo.html">mongo</a></li>
                             <li><a href="https://obeyconquer.github.io/category/mysqlbei-qing-dang.html">mysql被清档</a></li>
                             <li><a href="https://obeyconquer.github.io/category/na-mian-qiang-na-zhang-chuang-huan-you-na-ge-bing-xiang.html">那面墙，那张床，还有那个冰箱</a></li>
                             <li><a href="https://obeyconquer.github.io/category/xin-ling.html">心灵</a></li>
-                            <li class="active"><a href="https://obeyconquer.github.io/category/yun.html">云</a></li>
+                            <li><a href="https://obeyconquer.github.io/category/yun.html">云</a></li>
                         </ul>
                     </section>
                 </nav>
@@ -57,56 +57,86 @@
             
                 <div id="contents">
 <div class="row">
-    <div class="small-12 columns">
-        <h2>Articles in category &ldquo;云&rdquo;</h2>
-          <section class="summary">
-    <h3><a href="https://obeyconquer.github.io/dockershi-zhan-zhi-rong-qi-ji-chu.html" rel="bookmark" title="Permalink to docker实战之容器基础">docker实战之容器基础</a></h3>
-    <div class="row info-bar" style="margin-left:0rem;margin-bottom:6px;">
+    <div class="small-12 columns article">
+        <h2>py的logging模块</h2>
+        <div class="row info-bar" style="margin-left:0rem;margin-bottom:6px;">
     <div class="small-12 columns">
         <ul class="inline-list">
-            <li><span><i class="fa fa-calendar"></i>&nbsp; 五 19 五月 2017</span></li>
-            <li><span><i class="fa fa-folder-open"></i>&nbsp; <a href="https://obeyconquer.github.io/category/yun.html">云</a></span></li>
+            <li><span><i class="fa fa-calendar"></i>&nbsp; 一 19 六月 2017</span></li>
+            <li><span><i class="fa fa-folder-open"></i>&nbsp; <a href="https://obeyconquer.github.io/category/logging.html">logging</a></span></li>
             <li>
                 <span>
                     <i class="fa fa-tags"></i>&nbsp;
-                    <a href="https://obeyconquer.github.io/tag/rong-qi.html"><span class="label">容器</span></a>
+                    <a href="https://obeyconquer.github.io/tag/ri-zhi.html"><span class="label">日志</span></a>
                 </span>
             </li>
         </ul>
     </div>
 </div>
-    <div class="row summary">
-        <div class="small-12 medium-12 columns">
-            <p>docker概念</p>
-            <p class='text-right'><a href="https://obeyconquer.github.io/dockershi-zhan-zhi-rong-qi-ji-chu.html">Continue reading&hellip;</a></p>
-        </div>
-    </div>
-</section>
-  <section class="summary">
-    <h3><a href="https://obeyconquer.github.io/dockerji-chu.html" rel="bookmark" title="Permalink to docker基础">docker基础</a></h3>
-    <div class="row info-bar" style="margin-left:0rem;margin-bottom:6px;">
-    <div class="small-12 columns">
-        <ul class="inline-list">
-            <li><span><i class="fa fa-calendar"></i>&nbsp; 二 09 五月 2017</span></li>
-            <li><span><i class="fa fa-folder-open"></i>&nbsp; <a href="https://obeyconquer.github.io/category/yun.html">云</a></span></li>
-            <li>
-                <span>
-                    <i class="fa fa-tags"></i>&nbsp;
-                    <a href="https://obeyconquer.github.io/tag/rong-qi.html"><span class="label">容器</span></a>
-                </span>
-            </li>
-        </ul>
-    </div>
-</div>
-    <div class="row summary">
-        <div class="small-12 medium-12 columns">
-            <p>docker概念</p>
-            <p class='text-right'><a href="https://obeyconquer.github.io/dockerji-chu.html">Continue reading&hellip;</a></p>
-        </div>
-    </div>
-</section>
-
-
+        <section class="article">
+            <p>谨记提醒自己：不止要知道用法，还要理解清楚为什么。</p>
+<p>logging可以使用配置的选项logger、handler、formater。</p>
+<p>一.logger：是logging的主体。
+1.为程序提供记录日志的接口。
+2.判断日志所处级别，并判断是否要过滤。
+3.根据日志级别将日志分发给不同的handler。
+常用函数：
+logger.setlevel() 设置日志级别。
+logger.addhandler()和logger.removehandler() 添加和删除一个handler。
+logger.addfilter() 添加一个filter。</p>
+<p>二.handler：基于日志级别对日志进行分发，如设置warning级别的handler只会处理warning及以上级别的日志。
+例如：可以将一个应用所有的日志打印到文件中，error及以上的打印到屏幕，critical级别的日志发邮件。
+常用函数：
+setlevel() 设置级别。
+setformatter() 设置格式。</p>
+<p>三.formatter：配置日志格式，参数是日志格式fmt和时间格式datefmt。</p>
+<p>关于常用handlers
+1.StreamHandler：流handler，能将日志输出到sys.stdout,sys.stderr或者文件对象。
+2.Filehadnler：继承自StreamHandler，将日志信息输出到磁盘文件。
+3.NullHandler：空操作handler。
+4.WatchedFileHandler：位于logging.handlers模块中。用于监视文件的状态，如果文件被改变了，那么就关闭当前流，重新打开文件，创建一个新的流。由于newsyslog或者logrotate的使用会导致文件改变。这个handler是专门为linux/unix系统设计的，因为在windows系统下，正在被打开的文件是不会被改变的。 
+5.RotatingFileHandler：位于logging.handlers支持循环日志文件。
+6.TimedRotatingFileHandler：定时循环日志handler，位于logging.handlers，支持生成新日志文件。</p>
+<p>注：经常使用的handlers，StreamHandler、Filehadnler。</p>
+<p>为了让日志能够保证捕获到正常的信息，需要定义好哪些日志往哪输出。在Linux里，有三种方式：标准输入、标准输出、标准错误。logging模块需要定义好对应的输出方式，才能更好的捕获到对应的输出。
+例如：</p>
+<h1>logger 的定义</h1>
+<p>[loggers]
+keys=root,basicsLogger</p>
+<p>[logger_root]
+level=INFO
+handlers=infoHandler,errorHandler,fileHandler</p>
+<p>[logger_basicsLogger]
+level=INFO
+handlers=infoHandler,errorHandler,fileHandler
+qualname=basicsLogger
+propagate=0</p>
+<h1>handler 的定义</h1>
+<p>[handlers]
+keys=infoHandler,errorHandler,fileHandler</p>
+<p>[handler_infoHandler]
+class=StreamHandler
+level=INFO
+formatter=basicsFormatter
+args=(sys.stdout,)</p>
+<p>[handler_errorHandler]
+class=StreamHandler
+level=ERROR
+formatter=basicsFormatter
+args=(sys.stderr,)</p>
+<p>[handler_fileHandler]
+class=FileHandler
+level=INFO
+formatter=basicsFormatter
+args=('/data/home/user00/Initialization.log','a')</p>
+<h1>formatter 的定义</h1>
+<p>[formatters]
+keys=basicsFormatter</p>
+<p>[formatter_basicsFormatter]
+format=%(asctime)s - %(name)s - %(levelname)s - %(message)s
+datefmt=</p>
+<p>其中两个handler：handler_infoHandler、handler_errorHandler，一个定义了INFO级别以上的都输出到标准输出，一个定义ERROR级别以上的都输出到标准错误。这样就可以正确的捕获错误异常。</p>    
+        </section>
     </div>
 </div>
                 </div>
