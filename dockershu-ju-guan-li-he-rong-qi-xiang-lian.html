@@ -6,10 +6,10 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Mr.GaoYang" />
-        <title>心灵</title>
+        <title>docker数据管理和容器相连</title>
         
-        <meta name="description" content="" />
-        <meta name="keywords" content="Blog "/>
+<meta name="description" content="&lt;p&gt;docker 日常&lt;/p&gt;" />
+<meta name="keywords" content=" 日志  "/>
 
         <!--[if !IE 7]>
         <style type="text/css">
@@ -43,8 +43,8 @@
                             <li><a href="https://obeyconquer.github.io/category/mongo.html">mongo</a></li>
                             <li><a href="https://obeyconquer.github.io/category/mysqlbei-qing-dang.html">mysql被清档</a></li>
                             <li><a href="https://obeyconquer.github.io/category/na-mian-qiang-na-zhang-chuang-huan-you-na-ge-bing-xiang.html">那面墙，那张床，还有那个冰箱</a></li>
-                            <li><a href="https://obeyconquer.github.io/category/rong-qi-xiang-lian-he-shu-ju-guan-li.html">容器相连和数据管理</a></li>
-                            <li class="active"><a href="https://obeyconquer.github.io/category/xin-ling.html">心灵</a></li>
+                            <li class="active"><a href="https://obeyconquer.github.io/category/rong-qi-xiang-lian-he-shu-ju-guan-li.html">容器相连和数据管理</a></li>
+                            <li><a href="https://obeyconquer.github.io/category/xin-ling.html">心灵</a></li>
                             <li><a href="https://obeyconquer.github.io/category/yun.html">云</a></li>
                         </ul>
                     </section>
@@ -59,33 +59,71 @@
             
                 <div id="contents">
 <div class="row">
-    <div class="small-12 columns">
-        <h2>Articles in category &ldquo;心灵&rdquo;</h2>
-          <section class="summary">
-    <h3><a href="https://obeyconquer.github.io/xin-ling-ji-tang.html" rel="bookmark" title="Permalink to 心灵鸡汤">心灵鸡汤</a></h3>
-    <div class="row info-bar" style="margin-left:0rem;margin-bottom:6px;">
+    <div class="small-12 columns article">
+        <h2>docker数据管理和容器相连</h2>
+        <div class="row info-bar" style="margin-left:0rem;margin-bottom:6px;">
     <div class="small-12 columns">
         <ul class="inline-list">
-            <li><span><i class="fa fa-calendar"></i>&nbsp; 四 29 六月 2017</span></li>
-            <li><span><i class="fa fa-folder-open"></i>&nbsp; <a href="https://obeyconquer.github.io/category/xin-ling.html">心灵</a></span></li>
+            <li><span><i class="fa fa-calendar"></i>&nbsp; 五 14 七月 2017</span></li>
+            <li><span><i class="fa fa-folder-open"></i>&nbsp; <a href="https://obeyconquer.github.io/category/rong-qi-xiang-lian-he-shu-ju-guan-li.html">容器相连和数据管理</a></span></li>
             <li>
                 <span>
                     <i class="fa fa-tags"></i>&nbsp;
-                    <a href="https://obeyconquer.github.io/tag/ji-tang.html"><span class="label">鸡汤</span></a>
+                    <a href="https://obeyconquer.github.io/tag/ri-zhi.html"><span class="label">日志</span></a>
                 </span>
             </li>
         </ul>
     </div>
 </div>
-    <div class="row summary">
-        <div class="small-12 medium-12 columns">
-            <p>心灵鸡汤</p>
-            <p class='text-right'><a href="https://obeyconquer.github.io/xin-ling-ji-tang.html">Continue reading&hellip;</a></p>
-        </div>
-    </div>
-</section>
-
-
+        <section class="article">
+            <p>（1）数据管理
+数据管理类似于mount管理，特性：
+1.数据卷可以在容器之间共享和重用，容器间传递数据变得高效简单
+2.对数据卷的数据修改会立马生效，无论是本地还是容器操作
+3.对数据卷的更新不会影响镜像images，解耦了应用和数据
+4.卷会一直存在，直到没有容器使用，可以安全的卸载</p>
+<p>[root@k8s ~]# docker run -it -d --name ubuntu -v /root/test:/opt/test:ro ubuntu:latest
+ro和rw可以定义目录是只读还是读写。</p>
+<p>用法：
+可以单独建立一个数据卷的容器，本容器为data卷，然后让别的容器挂载本数据容器。
+步骤：
+1.[root@k8s ~]# docker run -it -d --name database -v /database ubuntu:latest
+2.[root@k8s ~]# docker run -it --volumes-from database --name data1 ubuntu:latest
+root@a3b04a75556e:/# ls
+bin  boot  database  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</p>
+<p>通过--volumes-from参数可以将数据容器挂载到其余的所有容器上。</p>
+<p>利用数据卷进行数据迁移
+数据卷也可以进行备份和恢复，数据卷的备份与恢复类似与文件的拷贝。
+备份：
+[root@k8s ~]# docker run --volumes-from database -v $(pwd):/backup --name worker ubuntu:latest tar cvzf /backup/backer.tar.gz /database
+tar: Removing leading `/' from member names
+/database/
+/database/1
+/database/2
+/database/3
+/database/4
+/database/5
+/database/6
+/database/7
+[root@k8s ~]# ls
+backer.tar.gz  scripts  test  test.tar.gz  utest.tar.gz</p>
+<p>还原：
+可以创建一个容器，并且挂载存在备份的目录。然后进入容器解压就ok了。</p>
+<p>（2）容器相连
+映射容器应用的服务端口到本地宿主主机，互联机制实现多个容器通过容器名访问。</p>
+<p>端口映射：
+-P参数会随机映射一个49000~49900的端口到内部容器开放的网络端口
+-p可以指定映射的端口，格式为：
+1) ip:hostport:containerport    映射到指定主机的指定端口到容器端口
+2) ip::containerport           映射指定主机的任意端口(随机分配)到容器端口
+3) hostport:containerport    映射本地的某个端口到容器端口</p>
+<p>还可以使用udp来标记端口类型，格式为映射规则后添加“/udp”。
+如：docker run -it -d --name test2 -p 800:800/udp test:latest</p>
+<p>小命令：docker inspect 容器ID    可以查询容器的详细信息。</p>
+<p>容器互联：
+使用—link 命令可以实现，格式如下：
+docker run -d -p 80:80 —name web —link db:db nginx:laster </p>    
+        </section>
     </div>
 </div>
                 </div>

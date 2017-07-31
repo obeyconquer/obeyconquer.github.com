@@ -6,10 +6,10 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Mr.GaoYang" />
-        <title>心灵</title>
+        <title>centos 7中一些IPV6和防火墙问题</title>
         
-        <meta name="description" content="" />
-        <meta name="keywords" content="Blog "/>
+<meta name="description" content="&lt;p&gt;centos 7中一些docker问题&lt;/p&gt;" />
+<meta name="keywords" content=" 日志  "/>
 
         <!--[if !IE 7]>
         <style type="text/css">
@@ -38,13 +38,13 @@
                         </ul>
                         <ul class="right">
                             <li><a href="https://obeyconquer.github.io/category/di-yi-ci-lian-shou.html">第一次练手</a></li>
-                            <li><a href="https://obeyconquer.github.io/category/ipv6he-fang-huo-qiang-wen-ti-dui-dockerde-ying-xiang.html">IPV6和防火墙问题对docker的影响</a></li>
+                            <li class="active"><a href="https://obeyconquer.github.io/category/ipv6he-fang-huo-qiang-wen-ti-dui-dockerde-ying-xiang.html">IPV6和防火墙问题对docker的影响</a></li>
                             <li><a href="https://obeyconquer.github.io/category/logging.html">logging</a></li>
                             <li><a href="https://obeyconquer.github.io/category/mongo.html">mongo</a></li>
                             <li><a href="https://obeyconquer.github.io/category/mysqlbei-qing-dang.html">mysql被清档</a></li>
                             <li><a href="https://obeyconquer.github.io/category/na-mian-qiang-na-zhang-chuang-huan-you-na-ge-bing-xiang.html">那面墙，那张床，还有那个冰箱</a></li>
                             <li><a href="https://obeyconquer.github.io/category/rong-qi-xiang-lian-he-shu-ju-guan-li.html">容器相连和数据管理</a></li>
-                            <li class="active"><a href="https://obeyconquer.github.io/category/xin-ling.html">心灵</a></li>
+                            <li><a href="https://obeyconquer.github.io/category/xin-ling.html">心灵</a></li>
                             <li><a href="https://obeyconquer.github.io/category/yun.html">云</a></li>
                         </ul>
                     </section>
@@ -59,33 +59,104 @@
             
                 <div id="contents">
 <div class="row">
-    <div class="small-12 columns">
-        <h2>Articles in category &ldquo;心灵&rdquo;</h2>
-          <section class="summary">
-    <h3><a href="https://obeyconquer.github.io/xin-ling-ji-tang.html" rel="bookmark" title="Permalink to 心灵鸡汤">心灵鸡汤</a></h3>
-    <div class="row info-bar" style="margin-left:0rem;margin-bottom:6px;">
+    <div class="small-12 columns article">
+        <h2>centos 7中一些IPV6和防火墙问题</h2>
+        <div class="row info-bar" style="margin-left:0rem;margin-bottom:6px;">
     <div class="small-12 columns">
         <ul class="inline-list">
-            <li><span><i class="fa fa-calendar"></i>&nbsp; 四 29 六月 2017</span></li>
-            <li><span><i class="fa fa-folder-open"></i>&nbsp; <a href="https://obeyconquer.github.io/category/xin-ling.html">心灵</a></span></li>
+            <li><span><i class="fa fa-calendar"></i>&nbsp; 二 04 七月 2017</span></li>
+            <li><span><i class="fa fa-folder-open"></i>&nbsp; <a href="https://obeyconquer.github.io/category/ipv6he-fang-huo-qiang-wen-ti-dui-dockerde-ying-xiang.html">IPV6和防火墙问题对docker的影响</a></span></li>
             <li>
                 <span>
                     <i class="fa fa-tags"></i>&nbsp;
-                    <a href="https://obeyconquer.github.io/tag/ji-tang.html"><span class="label">鸡汤</span></a>
+                    <a href="https://obeyconquer.github.io/tag/ri-zhi.html"><span class="label">日志</span></a>
                 </span>
             </li>
         </ul>
     </div>
 </div>
-    <div class="row summary">
-        <div class="small-12 medium-12 columns">
-            <p>心灵鸡汤</p>
-            <p class='text-right'><a href="https://obeyconquer.github.io/xin-ling-ji-tang.html">Continue reading&hellip;</a></p>
-        </div>
-    </div>
-</section>
-
-
+        <section class="article">
+            <p>在学习docker的一些问题。
+（1）在使用docker时，如果启用ipv6，当我们在启动容器并做端口映射时，如果没有指定地址，docker会默认把端口绑定在ipv6上面，这个时候我们需要关闭centos 7的ipv6.
+添加ipv6.disable=1</p>
+<p>[root@k8s ~]# cat /etc/default/grub
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"</p>
+<h1>GRUB_CMDLINE_LINUX="vconsole.keymap=us crashkernel=auto  vconsole.font=latarcyrheb-sun16 rhgb quiet"</h1>
+<p>GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet"
+GRUB_DISABLE_RECOVERY="true"</p>
+<p>修改后：
+[root@k8s ~]# cat /etc/default/grub
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"</p>
+<h1>GRUB_CMDLINE_LINUX="vconsole.keymap=us crashkernel=auto  vconsole.font=latarcyrheb-sun16 rhgb quiet"</h1>
+<p>GRUB_CMDLINE_LINUX="ipv6.disable=1 rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet"
+GRUB_DISABLE_RECOVERY=“true"</p>
+<p>grub2-mkconfig -o /boot/grub2/grub.cfg
+重启系统</p>
+<p>（2）在运行一些带端口对外提供服务的容器时，可能会遇到下面的问题：
+docker run -d -p 80:80 --name firstweb nginx  运行nginx
+报错：
+iptables failed: iptables --wait -t nat -A DOCKER -p tcp -d 0/0 --dport 80 -j DNAT --to-destination 192.168.0.2:80 ! -i docker0: iptables: No chain/target/match by that name.</p>
+<p>这个问题是防火墙问题造成的，运行docker容器时端口直接的映射是由nat映射而成，需要开启nat链。操作如下：</p>
+<p>首先先验证docker容器内部网络是否能ping通宿主机
+如果能ping通，即可通过重建docker0网络恢复
+先停掉宿主机上运行的docker容器，然后执行以下命令
+在宿主机执行：
+1. pkill docker 
+2. iptables -t nat -F 
+3. ifconfig docker0 down 
+4. brctl delbr docker0 注：yum install bridge-utils
+5. docker -d 
+6. systmctl restart docker 重启docker服务
+7. /usr/sbin/iptables-save &gt; /etc/sysconfig/iptables 保存防火墙规则</p>
+<p>查看iptables规则：
+[root@k8s ~]# iptables-save</p>
+<h1>Generated by iptables-save v1.4.21 on Mon Jul 31 10:24:49 2017</h1>
+<p>*nat
+:PREROUTING ACCEPT [37537:1988278]
+:INPUT ACCEPT [29754:1663126]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [9:468]
+:DOCKER - [0:0]
+-A PREROUTING -m addrtype --dst-type LOCAL -j DOCKER
+-A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j DOCKER
+-A POSTROUTING -s 192.168.0.0/20 ! -o docker0 -j MASQUERADE
+-A POSTROUTING -s 192.168.0.3/32 -d 192.168.0.3/32 -p tcp -m tcp --dport 5000 -j MASQUERADE
+-A DOCKER -i docker0 -j RETURN
+-A DOCKER ! -i docker0 -p tcp -m tcp --dport 5000 -j DNAT --to-destination 192.168.0.3:5000
+COMMIT</p>
+<h1>Completed on Mon Jul 31 10:24:49 2017</h1>
+<h1>Generated by iptables-save v1.4.21 on Mon Jul 31 10:24:49 2017</h1>
+<p>*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [376657:86070633]
+:DOCKER - [0:0]
+:DOCKER-ISOLATION - [0:0]
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+-A INPUT -s 106.37.232.114/32 -j ACCEPT
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j DOCKER-ISOLATION
+-A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -o docker0 -j DOCKER
+-A FORWARD -i docker0 ! -o docker0 -j ACCEPT
+-A FORWARD -i docker0 -o docker0 -j ACCEPT
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+-A DOCKER -d 192.168.0.3/32 ! -i docker0 -o docker0 -p tcp -m tcp --dport 5000 -j ACCEPT
+-A DOCKER-ISOLATION -j RETURN
+COMMIT</p>
+<h1>Completed on Mon Jul 31 10:24:49 2017</h1>    
+        </section>
     </div>
 </div>
                 </div>
